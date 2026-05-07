@@ -2,6 +2,7 @@ import React from 'react'
 import DepartmentTable from './DepartmentTable'
 
 export default function DepartmentList() {
+  
   return (
     <section className="content">
       <div className="container-fluid">
