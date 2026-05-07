@@ -1,7 +1,7 @@
 import React from "react";
 import DoctorsTable from "./DoctorsTable";
 
-export default function AddDoctors() {
+export default function DoctorsList() {
   return (
     <section className="content">
       <div className="container-fluid">

@@ -3,7 +3,8 @@ import {BrowserRouter as Router,Routes,Route,Navigate} from 'react-router-dom'
 import MainLayout from './components/pages/layout/MainLayout'
 import DoctorDashboard from './components/pages/doctor/DoctorDashboard'
 import AdminDashboard from './components/pages/admin/AdminDashboard'
-import AddDoctors from './components/pages/admin/AddDoctors'
+import DoctorsList from './components/pages/admin/DoctorsList'
+import DepartmentList from './components/pages/admin/DepartmentList'
 
 
 
@@ -13,7 +14,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<AdminDashboard />} />
-           <Route path='/doctors' element={<AddDoctors/>} />
+           <Route path='/doctors' element={<DoctorsList/>} />
+           <Route path='/department' element={<DepartmentList/>}/>
         </Route>
       </Routes>
     </Router>
