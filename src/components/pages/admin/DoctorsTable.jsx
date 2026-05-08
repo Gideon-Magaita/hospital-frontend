@@ -2,6 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
+import { Modal, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
+import ConfirmModal from "../../common/ConfirmModal";
+
+//API
+import {
+  getAllDoctors,
+  deleteDoctor,
+} from "../services/DoctorService";
 
 // DataTables
 import "datatables.net";
@@ -24,30 +33,86 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 window.JSZip = jszip;
 pdfMake.vfs = pdfFonts.vfs;
 
-// API
-import { getAllDoctors } from "../services/DoctorService";
 
 
 function DoctorsTable() {
+
   const tableRef = useRef(null);
 
   const [doctors, setDoctors] = useState([]);
 
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  //for showing doctor details popup modal
+  const [showViewModal, setShowViewModal] = useState(false);
+
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+
   // =========================
   // FETCH DOCTORS FROM API
   // =========================
-  const fetchDoctors = async () => {
+  
+    const fetchDoctors = async () => {
     try {
       const response = await getAllDoctors();
       setDoctors(response.data);
     } catch (error) {
-      console.error("Error fetching doctors:", error);
+      console.error(error);
     }
   };
 
-  useEffect(() => {
+//view details function
+const handleViewDoctor = (doctor) => {
+
+  setSelectedDoctor(doctor);
+
+  setShowViewModal(true);
+};
+
+
+//Modal button delete function
+  const handleDeleteClick = (id) => {
+    setSelectedDoctorId(id);
+    setShowDeleteModal(true);
+  };
+
+//confirm delete modal
+const confirmDelete = async () => {
+
+  try {
+
+    setDeleteLoading(true);
+
+    await deleteDoctor(selectedDoctorId);
+
+    toast.success("Doctor deleted successfully");
+
+    setShowDeleteModal(false);
+
     fetchDoctors();
-  }, []);
+
+  } catch (error) {
+
+    console.error(error);
+
+    toast.error("Failed to delete doctor");
+
+  } finally {
+
+    setDeleteLoading(false);
+  }
+};
+//end confirm delete
+
+
+useEffect(() => {
+  fetchDoctors();
+}, []);
 
   // =========================
   // INITIALIZE DATATABLE
@@ -95,6 +160,7 @@ function DoctorsTable() {
   }, [doctors]);
 
   return (
+    <>
     <div className="container-fluid">
       <div className="page-inner">
 
@@ -134,7 +200,6 @@ function DoctorsTable() {
                     <td>{doc.name}</td>
                     <td>{doc.specialization}</td>
 
-                    {/* If backend returns object use doc.department?.name */}
                     <td>{doc.departmentName}</td>
 
                     <td>{doc.phone}</td>
@@ -153,13 +218,24 @@ function DoctorsTable() {
 
                     <td>
                       <div className="d-flex justify-content-between">
-                        <button className="btn btn-success btn-sm">
-                          Edit
-                        </button>
-                        <button className="btn btn-secondary btn-sm">
+                        <Link
+                        to={`/edit-doctor/${doc.id}`}
+                        className="btn btn-success btn-sm"
+                      >
+                        Edit
+                      </Link>
+
+                        <button
+                          className="btn btn-secondary btn-sm text-white"
+                          onClick={() => handleViewDoctor(doc)}
+                        >
                           View
                         </button>
-                        <button className="btn btn-danger btn-sm">
+
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDeleteClick(doc.id)}
+                        >
                           Delete
                         </button>
                       </div>
@@ -175,6 +251,142 @@ function DoctorsTable() {
 
       </div>
     </div>
+
+
+  {/* confirm delete modal imported from commom folder  */}
+  <ConfirmModal
+    show={showDeleteModal}
+    onHide={() => setShowDeleteModal(false)}
+    onConfirm={confirmDelete}
+    title="Delete Doctor"
+    message="Are you sure you want to delete this doctor?"
+    loading={deleteLoading}
+  />
+
+  {/* modal to view doctor details */}
+  <Modal
+  show={showViewModal}
+  onHide={() => setShowViewModal(false)}
+  centered
+  size="lg"
+>
+
+  <Modal.Header
+    closeButton
+    className="bg-info text-white"
+  >
+    <Modal.Title>
+      Doctor Details
+    </Modal.Title>
+  </Modal.Header>
+
+  <Modal.Body>
+
+    {selectedDoctor && (
+
+      <div className="container-fluid">
+
+        {/* TOP DETAILS SECTION */}
+        <div className="text-center mb-4">
+
+          <div
+            className="rounded-circle bg-info text-white d-flex align-items-center justify-content-center mx-auto shadow"
+            style={{
+              width: "100px",
+              height: "100px",
+              fontSize: "40px",
+              fontWeight: "bold",
+            }}
+          >
+            {selectedDoctor.name.charAt(0)}
+          </div>
+
+          <h3 className="mt-3 fw-bold">
+            Dr. {selectedDoctor.name}
+          </h3>
+
+          <p className="text-muted">
+            {selectedDoctor.specialization}
+          </p>
+
+          <span
+            className={`badge px-3 py-2 ${
+              selectedDoctor.status === "Available"
+                ? "bg-success"
+                : "bg-danger"
+            }`}
+          >
+            {selectedDoctor.status}
+          </span>
+
+        </div>
+
+        {/* DETAILS SECTION */}
+        <div className="row g-4">
+
+          <div className="col-md-6">
+
+            <div className="card border-0 shadow-sm h-100">
+
+              <div className="card-body">
+
+                <h6 className="text-muted">
+                  Department
+                </h6>
+
+                <h5 className="fw-bold">
+                  {selectedDoctor.departmentName}
+                </h5>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div className="col-md-6">
+
+            <div className="card border-0 shadow-sm h-100">
+
+              <div className="card-body">
+
+                <h6 className="text-muted">
+                  Phone Number
+                </h6>
+
+                <h5 className="fw-bold">
+                  {selectedDoctor.phone}
+                </h5>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    )}
+
+  </Modal.Body>
+
+  <Modal.Footer>
+
+    <Button
+      variant="secondary"
+      onClick={() => setShowViewModal(false)}
+    >
+      Close
+    </Button>
+
+  </Modal.Footer>
+
+</Modal>
+
+</>
+
   );
 }
 

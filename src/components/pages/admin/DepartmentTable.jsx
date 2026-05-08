@@ -7,6 +7,7 @@ import {
   deleteDepartment,
 } from "../services/DepartmentService";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../../common/ConfirmModal";
   
 
 import $ from "jquery";
@@ -57,6 +58,14 @@ function DepartmentTable() {
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState(null);
 
+  //delete state with modal confirmation
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+
   // =========================
   // FETCH
   // =========================
@@ -106,6 +115,42 @@ function DepartmentTable() {
     return () => clearTimeout(timer);
 
   }, [departments]);
+
+//Modal button delete function
+  const handleDeleteClick = (id) => {
+    setSelectedDepartmentId(id);
+    setShowDeleteModal(true);
+  };
+
+//confirm delete modal
+const confirmDelete = async () => {
+
+  try {
+
+    setDeleteLoading(true);
+
+    await deleteDepartment(selectedDepartmentId);
+
+    toast.success("Department deleted successfully");
+
+    setShowDeleteModal(false);
+
+    fetchDepartments();
+
+  } catch (error) {
+
+    console.error(error);
+
+    toast.error("Failed to delete department");
+
+  } finally {
+
+    setDeleteLoading(false);
+  }
+};
+//end confirm delete
+
+
 
   // =========================
   // OPEN EDIT MODAL
@@ -216,6 +261,7 @@ function DepartmentTable() {
 
 
   return (
+    <>
     <div className="container-fluid">
 
       <div className="page-inner">
@@ -276,7 +322,7 @@ function DepartmentTable() {
                         
                         <button
                           className="btn btn-danger btn-sm"
-                          onClick={() => handleDelete(dept.id)}
+                          onClick={() => handleDeleteClick(dept.id)}
                         >
                           Delete
                         </button>
@@ -367,6 +413,19 @@ function DepartmentTable() {
       </div>
 
     </div>
+
+
+   
+   {/* confirm delete modal imported from commom folder  */}
+  <ConfirmModal
+    show={showDeleteModal}
+    onHide={() => setShowDeleteModal(false)}
+    onConfirm={confirmDelete}
+    title="Delete Department"
+    message="Are you sure you want to delete this department?"
+    loading={deleteLoading}
+  />
+    </>
   );
 }
 

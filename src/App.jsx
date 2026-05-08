@@ -6,7 +6,7 @@ import AdminDashboard from './components/pages/admin/AdminDashboard'
 import DoctorsList from './components/pages/admin/DoctorsList'
 import DepartmentList from './components/pages/admin/DepartmentList'
 import DepartmentDetails from './components/pages/admin/DepartmentDetails'
-import AddDoctor from './components/pages/admin/AddDoctor'
+import AddEditDoctor from './components/pages/admin/AddEditDoctor'
 //React toast imports
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +24,8 @@ function App() {
            <Route path='/doctors' element={<DoctorsList/>} />
            <Route path='/department' element={<DepartmentList/>}/>
            <Route path='/department-details/:id' element={<DepartmentDetails/>}/>
-           <Route path='/add-doctor' element={<AddDoctor/>}/>
+           <Route path='/add-doctor' element={<AddEditDoctor/>}/>
+           <Route path="/edit-doctor/:id" element={<AddEditDoctor />} />
         </Route>
       </Routes>
     </Router>
