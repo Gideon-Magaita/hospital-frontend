@@ -62,7 +62,9 @@ function DoctorsTable() {
       const response = await getAllDoctors();
       setDoctors(response.data);
     } catch (error) {
+      toast.error("Failed to load doctors")
       console.error(error);
+      
     }
   };
 

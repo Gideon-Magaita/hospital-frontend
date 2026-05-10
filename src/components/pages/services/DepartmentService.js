@@ -1,10 +1,11 @@
-import axios from 'axios'
+import API from "./ApiClient";
 
-const BASE_REST_API_URL = 'http://localhost:8080/api/department'
+export const getAllDepartments = () => API.get("/department");
 
+export const createDepartment = (department) => API.post("/department", department);
 
-export const getAllDepartments = () => axios.get(BASE_REST_API_URL)
-export const createDepartment = (department) => axios.post(BASE_REST_API_URL, department);
-export const updateDepartment = (id, department) => axios.put(`${BASE_REST_API_URL}/${id}`, department);
-export const deleteDepartment = (id) => axios.delete(`${BASE_REST_API_URL}/${id}`);
-export const getDepartmentById = (id) => axios.get(`${BASE_REST_API_URL}/${id}`);
+export const updateDepartment = (id, department) => API.put(`/department/${id}`, department);
+
+export const deleteDepartment = (id) => API.delete(`/department/${id}`);
+
+export const getDepartmentById = (id) => API.get(`/department/${id}`);

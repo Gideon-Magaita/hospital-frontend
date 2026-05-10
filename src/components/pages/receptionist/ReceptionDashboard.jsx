@@ -2,7 +2,7 @@ import React from 'react'
 import InfoCard from './InfoCard'
 import { getLoggedInUser, isUserLoggedIn } from "../services/AuthService";
 
-export default function AdminDashboard() {
+export default function ReceptionDashboard() {
 
     const isAuth = isUserLoggedIn();
    
