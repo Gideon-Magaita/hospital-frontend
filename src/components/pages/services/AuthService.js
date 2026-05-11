@@ -2,8 +2,8 @@ import axios from 'axios'
 
 
 // const AUTH_REST_API_URL = 'http://localhost:8080/api/auth/register'
-// const LOGIN_REST_API_URL = 'http://192.168.1.183:8080/api/auth'
-const LOGIN_REST_API_URL = 'http://192.168.11.48:8080/api/auth'
+const LOGIN_REST_API_URL = 'http://192.168.1.183:8080/api/auth'
+// const LOGIN_REST_API_URL = 'http://192.168.11.48:8080/api/auth'
 
 
 // export const registerUser = (registerObj) => axios.post(AUTH_REST_API_URL,registerObj);

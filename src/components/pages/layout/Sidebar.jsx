@@ -74,6 +74,16 @@ export default function Sidebar() {
                 </li>
 
                 <div className="dropdown-divider"></div>
+                {/* ================= SETTINGS ================= */}
+                <li className="nav-item">
+                  <Link to="#" className="nav-link">
+                    <i className="nav-icon fas fa-cog"></i>
+                    <p>Settings</p>
+                  </Link>
+                </li>
+
+                <div className="dropdown-divider"></div>
+
               </>
             )}
 
@@ -114,7 +124,7 @@ export default function Sidebar() {
                     }
                     >
                     <i className="nav-icon fas fa-calendar"></i>
-                    <p>Appointment</p>
+                    <p>Appointment Booking</p>
                   </NavLink>
                 </li>
 
@@ -131,29 +141,20 @@ export default function Sidebar() {
                 </li>
 
                 <div className="dropdown-divider"></div>
+                {/* ================= SETTINGS ================= */}
+                <li className="nav-item">
+                  <Link to="#" className="nav-link">
+                    <i className="nav-icon fas fa-cog"></i>
+                    <p>Settings</p>
+                  </Link>
+                </li>
+
+                <div className="dropdown-divider"></div>
+
               </>
             )}
 
-            {/* ================= SETTINGS ================= */}
-            <li className="nav-item">
-              <Link to="#" className="nav-link">
-                <i className="nav-icon fas fa-cog"></i>
-                <p>Settings</p>
-              </Link>
-            </li>
-
-            <div className="dropdown-divider"></div>
-
-            {/* ================= LOGOUT ================= */}
-            {/* <li className="nav-item">
-              <button
-                className="nav-link btn btn-link text-start w-100 border-0"
-                onClick={handleLogout}
-              >
-                <i className="nav-icon fas fa-lock"></i>
-                <p>Logout</p>
-              </button>
-            </li> */}
+            
 
           </ul>
         </nav>

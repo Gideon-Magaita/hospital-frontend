@@ -44,84 +44,83 @@ function App() {
   return (
     <>
     <Router>
+
       <Routes>
-        {/* === PUBLIC ROUTES ===*/}
-          <Route path="/login" element={<Login />} />
 
-        {/*=== PROTECTED ROUTES ===*/}
-        <Route path="/" element={<MainLayout />}>
-          <Route path='/admin-dashboard' element={
+        {/* ================= PUBLIC ROUTE ================= */}
+        <Route path="/login" element={<Login />} />
+
+        {/* ================= PROTECTED ROUTES ================= */}
+        <Route
+          path="/"
+          element={
             <AuthenticatedRoute>
-                <AdminDashboard />
+              <MainLayout />
             </AuthenticatedRoute>
-          
-            }/>
-           <Route path='/doctors' element={
-              <AuthenticatedRoute>
-                <DoctorsList/>
-              </AuthenticatedRoute>
-            } />
-           <Route path='/department' element={
-              <AuthenticatedRoute>
-                <DepartmentList/>
-              </AuthenticatedRoute>
+          }
+        >
 
-          }/>
-           <Route path='/department-details/:id' element={
-            <AuthenticatedRoute>
-            <DepartmentDetails/>
-          </AuthenticatedRoute>
- 
-            }/>
+          <Route
+            path="admin-dashboard"
+            element={<AdminDashboard />}
+          />
 
-           <Route path='/add-doctor' element={
-            <AuthenticatedRoute>
-               <AddEditDoctor/>
-            </AuthenticatedRoute>
-          
-            }/>
-           <Route path="/edit-doctor/:id" element={
-             <AuthenticatedRoute>
-               <AddEditDoctor />
-            </AuthenticatedRoute>
-           
-            } />
+          <Route
+            path="doctors"
+            element={<DoctorsList />}
+          />
 
-            <Route
-              path="/reception-dashboard"
-              element={
-                <AuthenticatedRoute>
-                  <ReceptionDashboard />
-                </AuthenticatedRoute>
-              }
-            />
+          <Route
+            path="department"
+            element={<DepartmentList />}
+          />
 
-            <Route path="/patient" element={
-             <AuthenticatedRoute>
-               <PatientList/>
-            </AuthenticatedRoute>
-           
-            } />
+          <Route
+            path="department-details/:id"
+            element={<DepartmentDetails />}
+          />
 
-            <Route path="/appointment" element={
-             <AuthenticatedRoute>
-               <AppointmentList/>
-            </AuthenticatedRoute>
-           
-            } />
+          <Route
+            path="add-doctor"
+            element={<AddEditDoctor />}
+          />
 
-            <Route path="/billing" element={
-             <AuthenticatedRoute>
-               <BillingList/>
-            </AuthenticatedRoute>
-           
-            } />
+          <Route
+            path="edit-doctor/:id"
+            element={<AddEditDoctor />}
+          />
 
+          <Route
+            path="reception-dashboard"
+            element={<ReceptionDashboard />}
+          />
+
+          <Route
+            path="patient"
+            element={<PatientList />}
+          />
+
+          <Route
+            path="appointment"
+            element={<AppointmentList />}
+          />
+
+          <Route
+            path="billing"
+            element={<BillingList />}
+          />
 
         </Route>
-      </Routes>
-    </Router>
 
+        {/* ================= DEFAULT ROUTE ================= */}
+        <Route
+          path="*"
+          element={<Navigate to="/login" />}
+        />
+
+      </Routes>
+
+    </Router>
 
     <ToastContainer
         position="top-right"
