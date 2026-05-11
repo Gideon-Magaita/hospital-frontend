@@ -510,7 +510,7 @@ const validateForm = () => {
                     </label>
 
                     <select
-                        className={`form-select ${
+                        className={`form-select  form-control ${
                             errors.gender ? "is-invalid" : ""
                         }`}
                         value={gender}
