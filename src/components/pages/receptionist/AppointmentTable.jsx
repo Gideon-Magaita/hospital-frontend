@@ -312,7 +312,7 @@ function AppointmentTable() {
                 </h3>
 
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-lg btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#appointmentModal"
                   onClick={resetForm}

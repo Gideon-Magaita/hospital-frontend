@@ -208,7 +208,7 @@ function BillingTable() {
 
                 {/* YOUR BUTTON */}
                 <button
-                  className="btn btn-info"
+                  className="btn btn-lg btn-info"
                   data-bs-toggle="modal"
                   data-bs-target="#billingModal"
                 >

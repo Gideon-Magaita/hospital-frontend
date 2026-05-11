@@ -334,7 +334,7 @@ const validateForm = () => {
                 <h3 className="mb-0 text-uppercase text-bold">Patient List</h3>
 
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-lg btn-primary"
                   data-bs-toggle="modal"
                   data-bs-target="#patientModal"
                   onClick={resetForm}
