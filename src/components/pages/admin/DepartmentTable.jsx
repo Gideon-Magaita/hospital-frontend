@@ -104,9 +104,11 @@ function DepartmentTable() {
           "<'row'<'col-12'<'table-responsive't>>>" +
           "<'row mt-3'<'col-md-5'i><'col-md-7'p>>",
         buttons: [
+
           { extend: "excel", className: "btn btn-success btn-sm",title:"Department Details" },
           { extend: "pdf", className: "btn btn-danger btn-sm",title:"Department Details" },
-          { extend: "print", className: "btn btn-secondary btn-sm",title:"Department Details" },
+          { extend: "print", className: "btn btn-secondary btn-sm",title:"Department Details" }
+
         ],
       });
 
