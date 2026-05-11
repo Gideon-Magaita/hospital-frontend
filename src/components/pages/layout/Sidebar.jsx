@@ -121,10 +121,13 @@ export default function Sidebar() {
                 <div className="dropdown-divider"></div>
 
                 <li className="nav-item">
-                  <Link to="/billing" className="nav-link">
+                  <NavLink to="/billing" className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                    >
                     <i className="nav-icon fas fa-file-invoice-dollar"></i>
                     <p>Billing</p>
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <div className="dropdown-divider"></div>
@@ -142,7 +145,7 @@ export default function Sidebar() {
             <div className="dropdown-divider"></div>
 
             {/* ================= LOGOUT ================= */}
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <button
                 className="nav-link btn btn-link text-start w-100 border-0"
                 onClick={handleLogout}
@@ -150,7 +153,7 @@ export default function Sidebar() {
                 <i className="nav-icon fas fa-lock"></i>
                 <p>Logout</p>
               </button>
-            </li>
+            </li> */}
 
           </ul>
         </nav>

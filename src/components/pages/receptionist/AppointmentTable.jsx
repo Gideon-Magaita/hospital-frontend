@@ -129,7 +129,6 @@ function AppointmentTable() {
           "<'row'<'col-12'fr>>" +
           "<'row'<'col-12'<'table-responsive't>>>" +
           "<'row mt-3'<'col-md-5'i><'col-md-7'p>>",
-
         buttons: [
           {
             extend: "excel",
@@ -308,7 +307,7 @@ function AppointmentTable() {
 
               <div className="d-flex justify-content-between align-items-center">
 
-                <h3 className="mb-0">
+                <h3 className="mb-0 text-uppercase text-bold">
                   Appointment List
                 </h3>
 
@@ -333,7 +332,7 @@ function AppointmentTable() {
                 className="table table-striped table-hover"
               >
 
-                <thead className="table-dark">
+                <thead className="table-secondary">
 
                   <tr>
                     <th>#</th>
@@ -385,7 +384,7 @@ function AppointmentTable() {
 
                       <td>
 
-                        <div className="d-flex gap-2">
+                        <div className="d-flex justify-content-between">
 
                           <button
                             className="btn btn-success btn-sm"

@@ -60,7 +60,6 @@ const handleSubmit = async (e) => {
         }
     }
 };
-
     return (
         <div className='container'>
             <div className="row justify-content-center">
@@ -75,7 +74,7 @@ const handleSubmit = async (e) => {
 
                                 {/* Username or Email */}
                                 <div className="mb-3">
-                                    <label className="form-label">Username or Email</label>
+                                    <label className="form-label">Username</label>
                                     <input
                                         type="text"
                                         className={`form-control ${errors.username && 'is-invalid'}`}
@@ -111,7 +110,7 @@ const handleSubmit = async (e) => {
                                 <div className="d-grid">
                                     <button
                                         type="submit"
-                                        className="btn btn-dark"
+                                        className="btn btn-dark form-control"
                                         disabled={loading}
                                     >
                                         {loading ? "Logging in..." : "Login"}

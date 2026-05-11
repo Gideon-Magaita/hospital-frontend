@@ -10,6 +10,7 @@ import PatientList from './components/pages/receptionist/PatientList'
 import AddEditDoctor from './components/pages/admin/AddEditDoctor'
 import ReceptionDashboard from './components/pages/receptionist/ReceptionDashboard'
 import AppointmentList from './components/pages/receptionist/AppointmentList'
+import BillingList from './components/pages/receptionist/BillingList'
 import Login from './components/auth/Login'
 //React toast imports
 import { ToastContainer } from 'react-toastify';
@@ -105,6 +106,13 @@ function App() {
             <Route path="/appointment" element={
              <AuthenticatedRoute>
                <AppointmentList/>
+            </AuthenticatedRoute>
+           
+            } />
+
+            <Route path="/billing" element={
+             <AuthenticatedRoute>
+               <BillingList/>
             </AuthenticatedRoute>
            
             } />

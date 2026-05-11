@@ -331,7 +331,7 @@ const validateForm = () => {
 
               <div className="d-flex justify-content-between align-items-center">
 
-                <h3 className="mb-0">Patient List</h3>
+                <h3 className="mb-0 text-uppercase text-bold">Patient List</h3>
 
                 <button
                   className="btn btn-primary"
@@ -354,7 +354,7 @@ const validateForm = () => {
                 className="table table-striped table-hover"
               >
 
-                <thead className="table-dark">
+                <thead className="table-secondary">
 
                   <tr>
                     <th>#</th>
@@ -364,7 +364,6 @@ const validateForm = () => {
                     <th>Date Of Birth</th>
                     <th>Phone</th>
                     <th>Address</th>
-                    <th>Created At</th>
                     <th>Actions</th>
                   </tr>
 
@@ -383,11 +382,6 @@ const validateForm = () => {
                       <td>{patient.dateOfBirth}</td>
                       <td>{patient.phoneNumber}</td>
                       <td>{patient.address}</td>
-                      <td>
-                        {patient.createdAt
-                          ? new Date(patient.createdAt).toLocaleString()
-                          : ""}
-                      </td>
 
                       <td>
 
