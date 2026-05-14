@@ -4,7 +4,7 @@ import { isUserLoggedIn } from "../services/AuthService";
 
 export default function AdminDashboard() {
 
-    const isAuth = isUserLoggedIn();
+  const isAuth = isUserLoggedIn();
   
 
     
