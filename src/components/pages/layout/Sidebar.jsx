@@ -63,6 +63,20 @@ export default function Sidebar() {
                 <div className="dropdown-divider"></div>
 
                 <li className="nav-item">
+                  <NavLink
+                    to="/specialization"
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                  >
+                    <i className="nav-icon fas fa-book"></i>
+                    <p>Specialization</p>
+                  </NavLink>
+                </li>
+
+                <div className="dropdown-divider"></div>
+
+                <li className="nav-item">
                   <NavLink to="/doctors" 
                   className={({ isActive }) =>
                       isActive ? "nav-link active" : "nav-link"

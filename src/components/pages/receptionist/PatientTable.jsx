@@ -49,6 +49,7 @@ function PatientTable() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
+  const [category,setCategory] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
@@ -86,6 +87,11 @@ const validateForm = () => {
   // GENDER
   if (!gender) {
     newErrors.gender = "Gender is required";
+  }
+
+  // Patient Category
+  if (!category) {
+    newErrors.category = "Category is required";
   }
 
   // DATE OF BIRTH
@@ -243,6 +249,7 @@ const validateForm = () => {
     firstName,
     lastName,
     gender,
+    category,
     dateOfBirth,
     phoneNumber,
     address,
@@ -307,6 +314,7 @@ const validateForm = () => {
   setFirstName("");
   setLastName("");
   setGender("");
+  setCategory("");
   setDateOfBirth("");
   setPhoneNumber("");
   setAddress("");
@@ -361,6 +369,7 @@ const validateForm = () => {
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Gender</th>
+                    <th>Patient Category</th>
                     <th>Date Of Birth</th>
                     <th>Phone</th>
                     <th>Address</th>
@@ -379,6 +388,7 @@ const validateForm = () => {
                       <td>{patient.firstName}</td>
                       <td>{patient.lastName}</td>
                       <td>{patient.gender}</td>
+                      <td>{patient.category}</td>
                       <td>{patient.dateOfBirth}</td>
                       <td>{patient.phoneNumber}</td>
                       <td>{patient.address}</td>
@@ -517,6 +527,31 @@ const validateForm = () => {
 
                         <div className="invalid-feedback">
                         {errors.gender}
+                        </div>
+
+                  </div>
+
+                  {/* Patient Category */}
+                  <div className="col-md-6 mb-3">
+
+                    <label className="form-label">
+                      Patient Category
+                    </label>
+
+                    <select
+                        className={`form-select  form-control ${
+                            errors.category ? "is-invalid" : ""
+                        }`}
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        >
+                        <option value="">Select Patient Category</option>
+                        <option value="REFFERAL">Refferal Patient</option>
+                        <option value="NORMAL_PATIENT">Normal Patient</option>
+                        </select>
+
+                        <div className="invalid-feedback">
+                        {errors.category}
                         </div>
 
                   </div>

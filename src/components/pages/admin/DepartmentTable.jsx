@@ -274,10 +274,10 @@ const confirmDelete = async () => {
           <div className="card-header">
               <div className="d-flex justify-content-between align-items-center w-100">
 
-                <h3 className="mb-0">Department List</h3>
+                <h3 className="mb-0 text-bold">Department List</h3>
 
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary btn-lg"
                   data-bs-toggle="modal"
                   data-bs-target="#departmentModal"
                   onClick={() => {

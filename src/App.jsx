@@ -6,11 +6,13 @@ import AdminDashboard from './components/pages/admin/AdminDashboard'
 import DoctorsList from './components/pages/admin/DoctorsList'
 import DepartmentList from './components/pages/admin/DepartmentList'
 import DepartmentDetails from './components/pages/admin/DepartmentDetails'
+import SpecializationList  from './components/pages/admin/SpecializationList'
 import PatientList from './components/pages/receptionist/PatientList'
 import AddEditDoctor from './components/pages/admin/AddEditDoctor'
 import ReceptionDashboard from './components/pages/receptionist/ReceptionDashboard'
 import AppointmentList from './components/pages/receptionist/AppointmentList'
 import BillingList from './components/pages/receptionist/BillingList'
+
 import Login from './components/auth/Login'
 //React toast imports
 import { ToastContainer } from 'react-toastify';
@@ -88,6 +90,11 @@ function App() {
           <Route
             path="edit-doctor/:id"
             element={<AddEditDoctor />}
+          />
+
+          <Route
+          path="specialization"
+          element={<SpecializationList/>}
           />
 
           <Route

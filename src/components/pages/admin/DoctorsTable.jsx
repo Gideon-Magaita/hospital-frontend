@@ -169,8 +169,8 @@ useEffect(() => {
         <div className="card shadow-sm mt-5">
           <div className="card-header">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h3 className="fw-bold">Doctors List</h3>
-              <Link className="btn btn-primary" to="/add-doctor">
+              <h3 className="fw-bold text-bold">Doctors List</h3>
+              <Link className="btn btn-primary btn-lg" to="/add-doctor">
                 Add Doctor
               </Link>
             </div>
@@ -200,7 +200,9 @@ useEffect(() => {
                   <tr key={doc.id}>
                     <td>{index + 1}</td>
                     <td>{doc.name}</td>
-                    <td>{doc.specialization}</td>
+                    <td>
+                       {doc.specializationName || "No specialization assigned"}
+                    </td>
 
                     <td>{doc.departmentName}</td>
 
@@ -308,7 +310,7 @@ useEffect(() => {
           </h3>
 
           <p className="text-muted">
-            {selectedDoctor.specialization}
+            {selectedDoctor.doctorSpecializationName}
           </p>
 
           <span

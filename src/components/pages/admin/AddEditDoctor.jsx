@@ -9,35 +9,34 @@ import {
 } from "../services/DoctorService";
 
 import { getAllDepartments } from "../services/DepartmentService";
+import { getAllSpecialization } from "../services/SpecializationService";
 
 function AddEditDoctor() {
 
   const navigate = useNavigate();
-
   const { id } = useParams();
-
   const isEdit = !!id;
 
   const [departments, setDepartments] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
 
   const [errors, setErrors] = useState({});
-
   const [loading, setLoading] = useState(false);
 
   const [doctor, setDoctor] = useState({
     name: "",
-    specialization: "",
     phone: "",
     status: "Available",
     departmentId: "",
+    doctorSpecializationId: "",
   });
 
-
   // =========================
-  // LOAD DEPARTMENTS
+  // INIT LOAD
   // =========================
   useEffect(() => {
     fetchDepartments();
+    fetchSpecializations();
 
     if (isEdit) {
       fetchDoctor();
@@ -53,11 +52,25 @@ function AddEditDoctor() {
       setDepartments(res.data);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load departments");
     }
   };
 
   // =========================
-  // FETCH DOCTOR BY ID
+  // FETCH SPECIALIZATIONS
+  // =========================
+  const fetchSpecializations = async () => {
+    try {
+      const res = await getAllSpecialization();
+      setSpecializations(res.data);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to load specializations");
+    }
+  };
+
+  // =========================
+  // FETCH DOCTOR
   // =========================
   const fetchDoctor = async () => {
     try {
@@ -65,10 +78,10 @@ function AddEditDoctor() {
 
       setDoctor({
         name: res.data.name,
-        specialization: res.data.specialization,
         phone: res.data.phone,
         status: res.data.status,
         departmentId: res.data.departmentId,
+        doctorSpecializationId: res.data.doctorSpecializationId,
       });
 
     } catch (error) {
@@ -86,12 +99,12 @@ function AddEditDoctor() {
 
     setDoctor({
       ...doctor,
-      [name]: name === "departmentId"
-        ? Number(value)
-        : value,
+      [name]:
+        name === "departmentId" || name === "doctorSpecializationId"
+          ? Number(value)
+          : value,
     });
 
-    // clear field error while typing
     setErrors({
       ...errors,
       [name]: "",
@@ -103,38 +116,34 @@ function AddEditDoctor() {
   // =========================
   const handleSubmit = async (e) => {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
+    try {
 
-    setLoading(true);
+      setLoading(true);
 
-    if (isEdit) {
+      if (isEdit) {
+        await updateDoctor(id, doctor);
+        toast.success("Doctor updated successfully");
+      } else {
+        await createDoctor(doctor);
+        toast.success("Doctor added successfully");
+      }
 
-      await updateDoctor(id, doctor);
+      navigate("/doctors");
 
-      toast.success("Doctor updated successfully");
+    } catch (error) {
 
-    } else {
+      if (error.response?.status === 400) {
+        setErrors(error.response.data);
+      }
 
-      await createDoctor(doctor);
+      toast.error("Operation failed");
 
-      toast.success("Doctor added successfully");
+    } finally {
+      setLoading(false);
     }
-
-    navigate("/doctors");
-
-  } catch (error) {
-
-    if (error.response?.status === 400) {
-      setErrors(error.response.data);
-    }
-
-  } finally {
-
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <section className="content">
@@ -147,9 +156,7 @@ function AddEditDoctor() {
             <div className="card shadow mt-5">
 
               <div className="card-header">
-                <h3>
-                  {isEdit ? "Edit Doctor" : "Add Doctor"}
-                </h3>
+                <h3>{isEdit ? "Edit Doctor" : "Add Doctor"}</h3>
               </div>
 
               <div className="card-body">
@@ -158,142 +165,109 @@ function AddEditDoctor() {
 
                   {/* NAME */}
                   <div className="mb-3">
-
                     <label>Name</label>
-
                     <input
                       type="text"
                       name="name"
                       className={`form-control ${errors.name ? "is-invalid" : ""}`}
                       value={doctor.name}
                       onChange={handleChange}
-                      placeholder="Enter doctor name"
                     />
-
                     {errors.name && (
-                      <div className="invalid-feedback">
-                        {errors.name}
-                      </div>
+                      <div className="invalid-feedback">{errors.name}</div>
                     )}
-
-                  </div>
-
-                  {/* SPECIALIZATION */}
-                  <div className="mb-3">
-
-                    <label>Specialization</label>
-
-                    <input
-                      type="text"
-                      name="specialization"
-                      className={`form-control ${errors.specialization ? "is-invalid" : ""}`}
-                      value={doctor.specialization}
-                      onChange={handleChange}
-                      placeholder="Enter specialization"
-                    />
-
-                    {errors.specialization && (
-                      <div className="invalid-feedback">
-                        {errors.specialization}
-                      </div>
-                    )}
-
                   </div>
 
                   {/* PHONE */}
                   <div className="mb-3">
-
                     <label>Phone</label>
-
                     <input
                       type="text"
                       name="phone"
                       className={`form-control ${errors.phone ? "is-invalid" : ""}`}
                       value={doctor.phone}
                       onChange={handleChange}
-                      placeholder="Enter phone number"
                     />
-
                     {errors.phone && (
-                      <div className="invalid-feedback">
-                        {errors.phone}
-                      </div>
+                      <div className="invalid-feedback">{errors.phone}</div>
                     )}
-
                   </div>
 
                   {/* STATUS */}
                   <div className="mb-3">
-
                     <label>Status</label>
-
                     <select
                       name="status"
-                      className={`form-control ${errors.status ? "is-invalid" : ""}`}
+                      className="form-control"
                       value={doctor.status}
                       onChange={handleChange}
                     >
-                      <option value="">-- Select Status --</option>
                       <option value="Available">AVAILABLE</option>
                       <option value="Unavailable">UNAVAILABLE</option>
                     </select>
-
-                    {errors.status && (
-                      <div className="invalid-feedback d-block">
-                        {errors.status}
-                      </div>
-                    )}
-
                   </div>
 
                   {/* DEPARTMENT */}
                   <div className="mb-3">
-
                     <label>Department</label>
-
                     <select
                       name="departmentId"
-                      className={`form-control ${errors.departmentId ? "is-invalid" : ""}`}
+                      className="form-control"
                       value={doctor.departmentId}
                       onChange={handleChange}
                     >
                       <option value="">-- Select Department --</option>
-
                       {departments.map((dept) => (
                         <option key={dept.id} value={dept.id}>
                           {dept.name}
                         </option>
                       ))}
+                    </select>
+                  </div>
+
+                  {/* SPECIALIZATION (NEW FIX) */}
+                  <div className="mb-3">
+                    <label>Specialization</label>
+
+                    <select
+                      name="doctorSpecializationId"
+                      className="form-control"
+                      value={doctor.doctorSpecializationId}
+                      onChange={handleChange}
+                    >
+                      <option value="">
+                        -- Select Specialization --
+                      </option>
+
+                      {specializations.map((spec) => (
+                        <option key={spec.id} value={spec.id}>
+                          {spec.specialization}
+                        </option>
+                      ))}
 
                     </select>
 
-                    {errors.departmentId && (
-                      <div className="invalid-feedback">
-                        {errors.departmentId}
+                    {errors.doctorSpecializationId && (
+                      <div className="invalid-feedback d-block">
+                        {errors.doctorSpecializationId}
                       </div>
                     )}
-
                   </div>
 
                   {/* BUTTONS */}
                   <div className="d-flex justify-content-between">
 
-                <button  type="submit"
-                    className="btn btn-primary"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                        ></span>
-
-                        {isEdit ? "Updating..." : "Saving..."}
-                      </>
-                    ) : (
-                      isEdit ? "Update Doctor" : "Save Doctor"
-                    )}
-                  </button>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={loading}
+                    >
+                      {loading
+                        ? "Saving..."
+                        : isEdit
+                        ? "Update Doctor"
+                        : "Save Doctor"}
+                    </button>
 
                     <button
                       type="button"
