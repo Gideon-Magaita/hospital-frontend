@@ -9,7 +9,6 @@ import {
 
 import { getAllAppointments } from "../services/AppointmentService";
 
-// DataTables
 import $ from "jquery";
 import "datatables.net";
 import "datatables.net-bs5";
@@ -25,7 +24,6 @@ window.JSZip = jszip;
 pdfMake.vfs = pdfFonts.vfs;
 
 function BillingTable() {
-  // ========================= STATE =========================
   const [billings, setBillings] = useState([]);
   const [appointments, setAppointments] = useState([]);
 
@@ -34,13 +32,12 @@ function BillingTable() {
   const [totalAmount, setTotalAmount] = useState("");
   const [status, setStatus] = useState("PENDING");
 
-  const [loading, setLoading] = useState(false);
   const [selectedBilling, setSelectedBilling] = useState(null);
 
   const tableRef = useRef(null);
   const printRef = useRef(null);
 
-  // ========================= FETCH =========================
+  // ================= FETCH =================
   const fetchBillings = async () => {
     try {
       const res = await getAllBillings();
@@ -64,7 +61,7 @@ function BillingTable() {
     fetchAppointments();
   }, []);
 
-  // ========================= DATATABLE =========================
+  // ================= DATATABLE =================
   useEffect(() => {
     if (!billings.length) return;
 
@@ -77,39 +74,35 @@ function BillingTable() {
         pageLength: 5,
         responsive: true,
         dom:
-            "<'row mb-2 align-items-center'" +
-              "<'col-md-6'l>" +
-              "<'col-md-6 d-flex justify-content-end'B>" +
-            ">" +
-            "<'row'<'col-12'tr>>" +
-            "<'row mt-2'<'col-md-5'i><'col-md-7'p>>",
-        buttons: [
-                {
-                  extend: "excel",
-                  className: "btn btn-success btn-sm",
-                },
-                {
-                  extend: "pdf",
-                  className: "btn btn-danger btn-sm",
-                },
-                {
-                  extend: "print",
-                  className: "btn btn-secondary btn-sm",
-                },
-              ],
+          "<'row mb-2 align-items-center'<'col-md-6'l><'col-md-6 d-flex justify-content-end'B>>" +
+          "<'row'<'col-12'tr>>" +
+          "<'row mt-2'<'col-md-5'i><'col-md-7'p>>",
+        buttons: ["excel", "pdf", "print"],
       });
     }, 100);
 
     return () => clearTimeout(timer);
   }, [billings]);
 
-  // ========================= CREATE BILL =========================
+  // ================= AUTO FILL FROM APPOINTMENT =================
+  const handleAppointmentChange = (id) => {
+    setAppointmentId(id);
+
+    const appt = appointments.find((a) => a.id == id);
+
+    if (appt) {
+      setPatientId(appt.patientId);
+
+      // Auto fill consultation price
+      setTotalAmount(appt.consultationPrice || 0);
+    }
+  };
+
+  // ================= CREATE BILL =================
   const saveBilling = async (e) => {
     e.preventDefault();
 
     try {
-      setLoading(true);
-
       const data = {
         appointmentId,
         patientId,
@@ -129,19 +122,10 @@ function BillingTable() {
 
       resetForm();
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error creating invoice");
-    } finally {
-      setLoading(false);
+      toast.error(
+        error.response?.data?.message || "Error creating invoice"
+      );
     }
-  };
-
-  // ========================= AUTO PATIENT =========================
-  const handleAppointmentChange = (id) => {
-    setAppointmentId(id);
-
-    const appt = appointments.find((a) => a.id == id);
-
-    if (appt) setPatientId(appt.patientId);
   };
 
   const resetForm = () => {
@@ -151,7 +135,12 @@ function BillingTable() {
     setStatus("PENDING");
   };
 
-  // ========================= PRINT INVOICE =========================
+  const getBadge = (status) => {
+    if (status === "PAID") return "bg-success";
+    if (status === "PENDING") return "bg-warning";
+    return "bg-danger";
+  };
+
   const handlePrint = () => {
     const win = window.open("", "", "width=900,height=650");
 
@@ -176,106 +165,77 @@ function BillingTable() {
     win.close();
   };
 
-  // ========================= BADGE =========================
-  const getBadge = (status) => {
-    if (status === "PAID") return "bg-success";
-    if (status === "PENDING") return "bg-warning";
-    return "bg-danger";
-  };
-
-  // ========================= UI =========================
   return (
-    <>
-      <div className="container-fluid">
-        <div className="page-inner">
-           <div className="row">
-             <div className="col-md-12">
+    <div className="container-fluid">
+      <div className="page-inner"> 
+        <div className="row"> 
+          <div className="col-md-12">
+      <div className="card shadow-sm mt-5">
 
-              <div className="card shadow-sm mt-5">
+        {/* HEADER */}
+        <div className="card-header">
+          <div className="d-flex justify-content-between align-items-center">
+           <h4 className="mb-0 text-uppercase text-bold">Billing / Invoices</h4>
 
-          {/* HEADER */}
-          <div className="card-header">
-
-            <div className="d-flex justify-content-between align-items-center">
-
-              <h4 className="mb-0 text-uppercase text-bold">Billing / Invoices</h4>
-
-              {/* RIGHT SIDE ACTIONS */}
-              <div className="d-flex align-items-center gap-2">
-
-                {/* DataTables buttons will appear here */}
-                <div id="dt-buttons"></div>
-
-                {/* YOUR BUTTON */}
-                <button
-                  className="btn btn-lg btn-info"
-                  data-bs-toggle="modal"
-                  data-bs-target="#billingModal"
-                >
-                  Generate Invoice
-                </button>
-
-              </div>
-
-            </div>
-
+          <button
+            className="btn btn-info btn-lg"
+            data-bs-toggle="modal"
+            data-bs-target="#billingModal"
+          >
+            Generate Invoice
+          </button>
           </div>
+          
+        </div>
 
-          {/* TABLE */}
-          <div className="card-body">
+        {/* TABLE */}
+        <div className="card-body">
+          <table ref={tableRef} className="table table-striped table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Invoice</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
 
-            <table
-              ref={tableRef}
-              className="table table-striped table-hover"
-            >
-              <thead className="table-dark">
-                <tr>
-                  <th>#</th>
-                  <th>Invoice No</th>
-                  <th>Patient</th>
-                  <th>Appointment Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th>Action</th>
+            <tbody>
+              {billings.map((b, i) => (
+                <tr key={b.id}>
+                  <td>{i + 1}</td>
+                  <td>{b.invoiceNumber}</td>
+                  <td>{b.patientName}</td>
+                  <td>{b.appointmentDate}</td>
+                  <td>Tsh {b.totalAmount}</td>
+
+                  <td>
+                    <span className={`badge ${getBadge(b.status)}`}>
+                      {b.status}
+                    </span>
+                  </td>
+
+                  <td>
+                    <button
+                      className="btn btn-info btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#viewInvoiceModal"
+                      onClick={() => setSelectedBilling(b)}
+                    >
+                      View
+                    </button>
+                  </td>
                 </tr>
-              </thead>
-
-              <tbody>
-                {billings.map((b, i) => (
-                  <tr key={b.id}>
-                    <td>{i + 1}</td>
-                    <td>{b.invoiceNumber}</td>
-                    <td>{b.patientName}</td>
-                    <td>{b.appointmentDate}</td>
-                    <td>Tsh {b.totalAmount}</td>
-
-                    <td>
-                      <span className={`badge ${getBadge(b.status)}`}>
-                        {b.status}
-                      </span>
-                    </td>
-
-                    <td>
-                      <button
-                        className="btn btn-info btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#viewInvoiceModal"
-                        onClick={() => setSelectedBilling(b)}
-                      >
-                        View Invoice
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-
-            </table>
-
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* ================= BILLING MODAL ================= */}
+      {/* ================= MODAL ================= */}
       <div className="modal fade" id="billingModal">
         <div className="modal-dialog">
           <div className="modal-content">
@@ -289,6 +249,7 @@ function BillingTable() {
 
               <form onSubmit={saveBilling}>
 
+                {/* APPOINTMENT */}
                 <select
                   className="form-select mb-2 form-control"
                   value={appointmentId}
@@ -304,12 +265,13 @@ function BillingTable() {
                   ))}
                 </select>
 
+                {/* AUTO AMOUNT-READ ONLY */}
                 <input
                   className="form-control mb-2"
                   type="number"
-                  placeholder="Amount"
                   value={totalAmount}
-                  onChange={(e) => setTotalAmount(e.target.value)}
+                  readOnly
+                  placeholder="Consultation fee"
                 />
 
                 <select
@@ -323,7 +285,7 @@ function BillingTable() {
                 </select>
 
                 <button className="btn btn-primary w-100">
-                  {loading ? "Saving..." : "Generate Invoice"}
+                  Generate Invoice
                 </button>
 
               </form>
@@ -334,7 +296,7 @@ function BillingTable() {
         </div>
       </div>
 
-      {/* ================= VIEW INVOICE MODAL ================= */}
+      {/* VIEW MODAL */}
       <div className="modal fade" id="viewInvoiceModal">
         <div className="modal-dialog">
           <div className="modal-content">
@@ -345,40 +307,34 @@ function BillingTable() {
             </div>
 
             <div className="modal-body">
-
               <div ref={printRef} className="p-3 border">
+                <h3 className="text-center">INVOICE</h3>
 
-                <h3 className="text-center">HOSPITAL INVOICE</h3>
-
-                <p><b>Invoice:</b> {selectedBilling?.invoiceNumber}</p>
-                <p><b>Patient:</b> {selectedBilling?.patientName}</p>
-                <p><b>Date:</b> {selectedBilling?.appointmentDate}</p>
-                <p><b>Amount:</b> Tsh {selectedBilling?.totalAmount}</p>
-                <p><b>Status:</b> {selectedBilling?.status}</p>
-
+                <p>Invoice: {selectedBilling?.invoiceNumber}</p>
+                <p>Patient: {selectedBilling?.patientName}</p>
+                <p>Date: {selectedBilling?.appointmentDate}</p>
+                <p>Amount: Tsh {selectedBilling?.totalAmount}</p>
+                <p>Status: {selectedBilling?.status}</p>
               </div>
-
             </div>
 
             <div className="modal-footer">
-
               <button className="btn btn-secondary" data-bs-dismiss="modal">
                 Close
               </button>
 
               <button className="btn btn-primary" onClick={handlePrint}>
-                Print Invoice
+                Print
               </button>
-
             </div>
 
           </div>
         </div>
       </div>
+     </div>
+    </div>
     </div>
   </div>
-  </div>
-    </>
   );
 }
 

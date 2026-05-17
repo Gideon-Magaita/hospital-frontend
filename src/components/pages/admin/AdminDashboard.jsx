@@ -1,50 +1,114 @@
-import React from 'react'
-import InfoCard from './InfoCard'
-import { isUserLoggedIn } from "../services/AuthService";
+import React, { useEffect, useState } from "react";
+import InfoCard from "./InfoCard";
+
+import { getAllDepartments } from "../services/DepartmentService";
+import { getAllDoctors } from "../services/DoctorService";
+import { getAllSpecialization } from "../services/SpecializationService";
 
 export default function AdminDashboard() {
 
-  const isAuth = isUserLoggedIn();
-  
+  const [departments, setDepartments] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
 
-    
+  // ================= FETCH DATA =================
+  useEffect(() => {
+
+    fetchDepartments();
+    fetchDoctors();
+    fetchSpecializations();
+
+  }, []);
+
+  const fetchDepartments = async () => {
+
+    try {
+
+      const response = await getAllDepartments();
+      setDepartments(response.data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  const fetchDoctors = async () => {
+
+    try {
+
+      const response = await getAllDoctors();
+      setDoctors(response.data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  const fetchSpecializations = async () => {
+
+    try {
+
+      const response =
+        await getAllSpecialization();
+
+      setSpecializations(response.data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  // ================= COUNTS =================
+
+  const totalDepartments = departments.length;
+
+  const totalDoctors = doctors.length;
+
+  const totalSpecializations = specializations.length;
+
+  // ================= UI =================
+
   return (
     <section className="content">
-          <div className="container-fluid">
 
-            <div className="row">
-    
-              <InfoCard
-                icon="fas fa-cog"
-                bg="bg-info"
-                title="CPU Traffic"
-                value="10%"
-              />
-    
-              <InfoCard
-                icon="fas fa-thumbs-up"
-                bg="bg-danger"
-                title="Likes"
-                value="41,410"
-              />
-    
-              <InfoCard
-                icon="fas fa-shopping-cart"
-                bg="bg-success"
-                title="Sales"
-                value="760"
-              />
-    
-              <InfoCard
-                icon="fas fa-users"
-                bg="bg-warning"
-                title="New Members"
-                value="2,000"
-              />
-    
-            </div>
-            
-          </div>
-        </section>
-  )
+      <div className="container-fluid">
+
+        <div className="row">
+
+          {/* DEPARTMENTS */}
+          <InfoCard
+            icon="fas fa-building"
+            bg="bg-info"
+            title="Departments"
+            value={totalDepartments}
+          />
+
+          {/* SPECIALIZATIONS */}
+          <InfoCard
+            icon="fas fa-stethoscope"
+            bg="bg-danger"
+            title="Specializations"
+            value={totalSpecializations}
+          />
+
+          {/* DOCTORS */}
+          <InfoCard
+            icon="fas fa-user-md"
+            bg="bg-success"
+            title="Doctors"
+            value={totalDoctors}
+          />
+
+        </div>
+
+      </div>
+
+    </section>
+  );
 }

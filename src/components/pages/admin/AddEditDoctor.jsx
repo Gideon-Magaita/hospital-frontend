@@ -29,6 +29,11 @@ function AddEditDoctor() {
     status: "Available",
     departmentId: "",
     doctorSpecializationId: "",
+
+    // LOGIN DETAILS
+    username: "",
+    email: "",
+    password: "",
   });
 
   // =========================
@@ -74,14 +79,20 @@ function AddEditDoctor() {
   // =========================
   const fetchDoctor = async () => {
     try {
+
       const res = await getDoctorById(id);
 
       setDoctor({
-        name: res.data.name,
-        phone: res.data.phone,
-        status: res.data.status,
-        departmentId: res.data.departmentId,
-        doctorSpecializationId: res.data.doctorSpecializationId,
+        name: res.data.name || "",
+        phone: res.data.phone || "",
+        status: res.data.status || "Available",
+        departmentId: res.data.departmentId || "",
+        doctorSpecializationId:
+          res.data.doctorSpecializationId || "",
+
+        username: res.data.username || "",
+        email: res.data.email || "",
+        password: "",
       });
 
     } catch (error) {
@@ -100,7 +111,8 @@ function AddEditDoctor() {
     setDoctor({
       ...doctor,
       [name]:
-        name === "departmentId" || name === "doctorSpecializationId"
+        name === "departmentId" ||
+        name === "doctorSpecializationId"
           ? Number(value)
           : value,
     });
@@ -123,16 +135,23 @@ function AddEditDoctor() {
       setLoading(true);
 
       if (isEdit) {
+
         await updateDoctor(id, doctor);
+
         toast.success("Doctor updated successfully");
+
       } else {
+
         await createDoctor(doctor);
+
         toast.success("Doctor added successfully");
       }
 
       navigate("/doctors");
 
     } catch (error) {
+
+      console.log(error);
 
       if (error.response?.status === 400) {
         setErrors(error.response.data);
@@ -141,6 +160,7 @@ function AddEditDoctor() {
       toast.error("Operation failed");
 
     } finally {
+
       setLoading(false);
     }
   };
@@ -156,7 +176,9 @@ function AddEditDoctor() {
             <div className="card shadow mt-5">
 
               <div className="card-header">
-                <h3>{isEdit ? "Edit Doctor" : "Add Doctor"}</h3>
+                <h3>
+                  {isEdit ? "Edit Doctor" : "Add Doctor"}
+                </h3>
               </div>
 
               <div className="card-body">
@@ -165,68 +187,142 @@ function AddEditDoctor() {
 
                   {/* NAME */}
                   <div className="mb-3">
-                    <label>Name</label>
+                    <label>Full Name</label>
+
                     <input
                       type="text"
                       name="name"
-                      className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                      className={`form-control ${
+                        errors.name ? "is-invalid" : ""
+                      }`}
                       value={doctor.name}
                       onChange={handleChange}
+                      placeholder="Enter doctor's full name"
                     />
+
                     {errors.name && (
-                      <div className="invalid-feedback">{errors.name}</div>
+                      <div className="invalid-feedback">
+                        {errors.name}
+                      </div>
                     )}
                   </div>
 
                   {/* PHONE */}
                   <div className="mb-3">
                     <label>Phone</label>
+
                     <input
                       type="text"
                       name="phone"
-                      className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                      className={`form-control ${
+                        errors.phone ? "is-invalid" : ""
+                      }`}
                       value={doctor.phone}
                       onChange={handleChange}
+                      placeholder="Enter phone number"
                     />
+
                     {errors.phone && (
-                      <div className="invalid-feedback">{errors.phone}</div>
+                      <div className="invalid-feedback">
+                        {errors.phone}
+                      </div>
                     )}
+                  </div>
+
+                  {/* USERNAME */}
+                  <div className="mb-3">
+                    <label>Username</label>
+
+                    <input
+                      type="text"
+                      name="username"
+                      className="form-control"
+                      value={doctor.username}
+                      onChange={handleChange}
+                      placeholder="Enter username"
+                    />
+                  </div>
+
+                  {/* EMAIL */}
+                  <div className="mb-3">
+                    <label>Email</label>
+
+                    <input
+                      type="email"
+                      name="email"
+                      className="form-control"
+                      value={doctor.email}
+                      onChange={handleChange}
+                      placeholder="Enter email"
+                    />
+                  </div>
+
+                  {/* PASSWORD */}
+                  <div className="mb-3">
+                    <label>
+                      {isEdit
+                        ? "Change Password"
+                        : "Password"}
+                    </label>
+
+                    <input
+                      type="password"
+                      name="password"
+                      className="form-control"
+                      value={doctor.password}
+                      onChange={handleChange}
+                      placeholder="Enter password"
+                    />
                   </div>
 
                   {/* STATUS */}
                   <div className="mb-3">
                     <label>Status</label>
+
                     <select
                       name="status"
                       className="form-control"
                       value={doctor.status}
                       onChange={handleChange}
                     >
-                      <option value="Available">AVAILABLE</option>
-                      <option value="Unavailable">UNAVAILABLE</option>
+                      <option value="Available">
+                        AVAILABLE
+                      </option>
+
+                      <option value="Unavailable">
+                        UNAVAILABLE
+                      </option>
                     </select>
                   </div>
 
                   {/* DEPARTMENT */}
                   <div className="mb-3">
                     <label>Department</label>
+
                     <select
                       name="departmentId"
                       className="form-control"
                       value={doctor.departmentId}
                       onChange={handleChange}
                     >
-                      <option value="">-- Select Department --</option>
+                      <option value="">
+                        -- Select Department --
+                      </option>
+
                       {departments.map((dept) => (
-                        <option key={dept.id} value={dept.id}>
+                        <option
+                          key={dept.id}
+                          value={dept.id}
+                        >
                           {dept.name}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  {/* SPECIALIZATION (NEW FIX) */}
+                  {/* SPECIALIZATION */}
                   <div className="mb-3">
+
                     <label>Specialization</label>
 
                     <select
@@ -240,18 +336,15 @@ function AddEditDoctor() {
                       </option>
 
                       {specializations.map((spec) => (
-                        <option key={spec.id} value={spec.id}>
+                        <option
+                          key={spec.id}
+                          value={spec.id}
+                        >
                           {spec.specialization}
                         </option>
                       ))}
-
                     </select>
 
-                    {errors.doctorSpecializationId && (
-                      <div className="invalid-feedback d-block">
-                        {errors.doctorSpecializationId}
-                      </div>
-                    )}
                   </div>
 
                   {/* BUTTONS */}

@@ -190,6 +190,8 @@ useEffect(() => {
                   <th>Specialization</th>
                   <th>Department</th>
                   <th>Phone</th>
+                  <th>Username</th>
+                  <th>Email</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -207,6 +209,8 @@ useEffect(() => {
                     <td>{doc.departmentName}</td>
 
                     <td>{doc.phone}</td>
+                    <td>{doc.username}</td>
+                    <td>{doc.email}</td>
 
                     <td>
                       <span
@@ -310,7 +314,7 @@ useEffect(() => {
           </h3>
 
           <p className="text-muted">
-            {selectedDoctor.doctorSpecializationName}
+            {selectedDoctor.specializationName}
           </p>
 
           <span
@@ -360,6 +364,47 @@ useEffect(() => {
 
                 <h5 className="fw-bold">
                   {selectedDoctor.phone}
+                </h5>
+
+              </div>
+
+            </div>
+
+          </div>
+
+            {/* added new card */}
+          <div className="col-md-6">
+
+            <div className="card border-0 shadow-sm h-100">
+
+              <div className="card-body">
+
+                <h6 className="text-muted">
+                  Username
+                </h6>
+
+                <h5 className="fw-bold">
+                  {selectedDoctor.username}
+                </h5>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div className="col-md-6">
+
+            <div className="card border-0 shadow-sm h-100">
+
+              <div className="card-body">
+
+                <h6 className="text-muted">
+                  Email
+                </h6>
+
+                <h5 className="fw-bold">
+                  {selectedDoctor.email}
                 </h5>
 
               </div>

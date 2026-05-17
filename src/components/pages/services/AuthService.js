@@ -51,9 +51,9 @@ export const isAdminUser = () =>{
 }
 
 
-// export const isDoctorUser = () => {
-//     return sessionStorage.getItem("role") === "ROLE_DOCTOR";
-// };
+export const isDoctorUser = () => {
+    return sessionStorage.getItem("role") === "ROLE_DOCTOR";
+};
 
 export const isReceptionistUser = () => {
     return sessionStorage.getItem("role") === "ROLE_RECEPTIONIST";

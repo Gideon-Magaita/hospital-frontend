@@ -144,7 +144,7 @@ export const SpecializationTable = () => {
 
       await deleteSpecialization(selectedSpecializationId);
 
-      toast.success("Specialization deleted successfully");
+      toast.success("Doctor specialization deleted successfully");
 
       setShowDeleteModal(false);
 
@@ -206,7 +206,7 @@ export const SpecializationTable = () => {
 
         await updateSpecialization(editId, specializationData);
 
-        toast.success("Specialization updated successfully");
+        toast.success("Doctor specialization updated successfully");
 
         setSpecializations((prev) =>
           prev.map((item) =>
@@ -231,7 +231,7 @@ export const SpecializationTable = () => {
           response.data,
         ]);
 
-        toast.success("Specialization added successfully");
+        toast.success("Doctor specialization added successfully");
 
       }
 
@@ -310,7 +310,7 @@ export const SpecializationTable = () => {
                   <tr>
                     <th>#</th>
                     <th>Specialization</th>
-                    <th>Price</th>
+                    <th>Consultation Price</th>
                     <th>Actions</th>
                   </tr>
 
@@ -330,10 +330,10 @@ export const SpecializationTable = () => {
 
                       <td>
 
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex justify-content-end">
 
                           <button
-                            className="btn btn-success btn-sm"
+                            className="btn btn-success btn-sm mr-5"
                             onClick={() => handleEdit(item)}
                           >
                             Edit

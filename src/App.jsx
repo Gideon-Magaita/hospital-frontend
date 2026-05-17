@@ -117,8 +117,15 @@ function App() {
             element={<BillingList />}
           />
 
+          {/**DOCTOR URLS */}
+          <Route
+            path="doctor-dashboard"
+            element={<DoctorDashboard />}
+          />
+
         </Route>
 
+      
         {/* ================= DEFAULT ROUTE ================= */}
         <Route
           path="*"
